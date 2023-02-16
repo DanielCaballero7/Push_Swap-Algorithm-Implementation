@@ -6,7 +6,7 @@
 /*   By: dcaballe <dcaballe@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:00:41 by dcaballe          #+#    #+#             */
-/*   Updated: 2023/02/13 21:37:07 by dcaballe         ###   ########.fr       */
+/*   Updated: 2023/02/15 13:12:47 by dcaballe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,8 @@
 # include <unistd.h>
 # include "../libft/libft.h"
 
-int	check_arg(char *str);
-int	parse_string(char *str);
-int	conver_string(char *str, long **ptr, int nums);
-int	make_array(int argc, char **argv, int nums, long **array);
+int	are_digits(char *str);
+int	to_int_array(int argc, char **argv, int nums, long **array);
 int	parse_args(int argc, char **argv, long **ptr);
 
 #endif

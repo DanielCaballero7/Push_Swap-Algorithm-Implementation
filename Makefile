@@ -5,11 +5,11 @@ SRCS = src/main.c
 TEST = tests/checker.c
 LIBFT = libft/libft.a
 
-all : $(NAME2)
+all : $(NAME)
 
-$(NAME2): $(SRCS) $(LIBFT) $(TEST)
-	$(CC) $(SRCS) $(TEST) $(LIBFT) -o $(NAME2)
+$(NAME): $(SRCS) $(LIBFT)
+	$(CC) $(SRCS) $(LIBFT) -o $(NAME)
 clean:
-	rm -f $(NAME2)
+	rm -f $(NAME)
 re : clean all
 .PHONY: all clean re
