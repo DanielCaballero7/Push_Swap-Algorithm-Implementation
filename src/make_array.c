@@ -6,7 +6,7 @@
 /*   By: dcaballe <dcaballe@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 13:40:40 by dcaballe          #+#    #+#             */
-/*   Updated: 2023/02/16 13:41:09 by dcaballe         ###   ########.fr       */
+/*   Updated: 2023/02/16 14:03:16 by dcaballe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,11 @@ int	parse_args(int argc, char **argv, long **ptr)
 				return (-1);
 		}
 	}
-	if (nums == -1)
+	if (nums == -1 || to_int_array(argc, argv, nums, ptr) == -1)
 		return (-1);
-	if (to_int_array(argc, argv, nums, ptr) == -1)
-		return (-1);
-	while (--nums >= 0)
-		if ((*ptr)[nums] > 2147483647 || (*ptr)[nums] < -2147483648)
+	i = -1;
+	while (++i < nums)
+		if ((*ptr)[i] > 2147483647 || (*ptr)[i] < -2147483648)
 			return (-1);
-	return (0);
+	return (nums);
 }
