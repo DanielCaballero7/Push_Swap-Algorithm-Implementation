@@ -1,34 +1,40 @@
 #include "../inc/push_swap.h"
 
 /*text parse_args*/
-void	test_parse_args(void)
+int	main(int argc, char **argv)
 {
-	int		argc;
-	char	**argv;
-	long	*ptr;
-	int		nums;
+	long	*array;
+	t_array	*index_array;
+	t_stack	*stack_a;
+	t_node	*node_a;
+	//int	i = 0;
 
-	argc = 2;
-	argv = malloc(sizeof(char *) * argc);
-	argv[0] = "push_swap";
-	argv[1] = "1 2 3 4 5 6 7 8 9 10";
-	nums = are_digits(argv[1]);
-	printf("nums: %d\n", nums);
-	parse_args(argc, argv, &ptr);
-	while (nums > 0)
+	stack_a = malloc(sizeof(t_stack));
+	if (argc == 1 || !stack_a)
 	{
-		printf("%ld\n", ptr[nums - 1]);
-		nums--;
+		ft_putstr_fd(ERROR_ARGS, 2);
+		return (-1);
 	}
-}
-
-int	main(void)
-{
-	int		argc;
-	char	**argv;
-	long	*ptr;
-	int		nums;
-
-	test_parse_args();
+	stack_a->size = parse_args(argc, argv, &array);
+	if (stack_a->size == -1)
+	{
+		ft_putstr_fd(ERROR_ARGS, 2);
+		return (-1);
+	}
+	if (check_duplicates(array, stack_a->size) == -1)
+	{
+		ft_putstr_fd(ERROR_ARGS, 2);
+		return (-1);
+	}
+	index_array = organize_array(array, stack_a->size);
+	if (!index_array)
+		return (-1);
+	/*while (i < stack_a->size)
+	{
+		printf("%lu, %d\n", index_array->array[i], index_array->index[i]);
+		i++;
+	}*/
+	node_a = make_stack_a(index_array);
+	push_swap(node_a, stack_a);
 	return (0);
 }

@@ -1,15 +1,22 @@
 NAME = push_swap
 NAME2 = checker
 CC = gcc -g
-SRCS = src/main.c src/make_array.c
+SRCS = src/make_array.c src/sort_array.c src/make_stacks.c src/push_swap.c \
+		src/stack_utils.c
+MAIN = src/main.c
 TEST = tests/checker.c
 LIBFT = libft/libft.a
 
 all : $(NAME)
-
-$(NAME): $(SRCS) $(LIBFT)
-	$(CC) $(SRCS) $(LIBFT) -o $(NAME)
+test: $(NAME2)
+$(NAME2): $(TEST) $(SRCS) $(LIBFT)
+	$(CC) $(SRCS) $(TEST) $(LIBFT) -o $(NAME2)
+$(NAME): $(SRCS) $(MAIN) $(LIBFT)
+	$(CC) $(SRCS) $(MAIN) $(LIBFT) -o $(NAME)
 clean:
 	rm -f $(NAME)
 re : clean all
-.PHONY: all clean re
+retest: 
+	rm -f $(NAME2) 
+	make test
+.PHONY: all clean re retest test

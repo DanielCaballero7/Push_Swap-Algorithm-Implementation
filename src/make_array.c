@@ -6,11 +6,44 @@
 /*   By: dcaballe <dcaballe@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 13:40:40 by dcaballe          #+#    #+#             */
-/*   Updated: 2023/02/16 14:03:16 by dcaballe         ###   ########.fr       */
+/*   Updated: 2023/02/28 20:45:13 by dcaballe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/push_swap.h"
+
+int	check_duplicates(long *array, int nums)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	while (i < nums)
+	{
+		j = i + 1;
+		while (j < nums)
+		{
+			if (array[i] == array[j])
+				return (-1);
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	*fill_index(int *index, int nums)
+{
+	int	i;
+
+	i = 1;
+	while (i <= nums)
+	{
+		index[i - 1] = i - 1;
+		i++;
+	}
+	return (index);
+}
 
 /*Check if args are digits; return number of digits*/
 int	are_digits(char *str)
@@ -32,6 +65,8 @@ int	are_digits(char *str)
 		else
 			i++;
 	}
+	if (!ft_isdigit(str[i]) && str[i] != '\0')
+		return (-1);
 	return (ft_count(str, ' ') + 1);
 }
 
