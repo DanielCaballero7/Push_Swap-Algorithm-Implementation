@@ -2,7 +2,7 @@ NAME = push_swap
 NAME2 = checker
 CC = gcc -g
 SRCS = src/make_array.c src/sort_array.c src/make_stacks.c src/push_swap.c \
-		src/stack_utils.c
+		src/stack_utils.c src/position.c
 MAIN = src/main.c
 TEST = tests/checker.c
 LIBFT = libft/libft.a

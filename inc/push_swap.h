@@ -6,7 +6,7 @@
 /*   By: dcaballe <dcaballe@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:00:41 by dcaballe          #+#    #+#             */
-/*   Updated: 2023/02/28 23:35:48 by dcaballe         ###   ########.fr       */
+/*   Updated: 2023/03/03 14:37:23 by dcaballe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_node
 	int				index;
 	int				pos;
 	int				nbr_moves;
+	int				target;
 	int				last;
 	struct s_node	*next;
 }	t_node;
@@ -61,9 +62,14 @@ t_node			*find_lst(t_node *node);
 int				is_sorted(t_node *node);
 int				get_stack_size(t_node *node);
 void			push_swap(t_node *stack_a, t_stack *stack_a_info);
-static void		sort3(t_node *node, t_stack *stack);
+void			set_position(t_node *node);
+static void		set_target(t_node *node_a, t_node *node_b);
+void			find_target(t_node *node_a, t_node *node_b);
+static void		last_next(t_node *node);
+static void		find_cost(t_node *node, t_stack *stack_a, t_stack *stack_b);
+static t_node	*sort3(t_node *node, t_stack *stack);
 static t_node	*r_rotate(t_node *node, t_stack *stack);
-static void		rotate(t_node *node, t_stack *stack);
-static void		swap(t_node *node, t_stack *stack);
+static t_node	*rotate(t_node *node, t_stack *stack);
+static t_node	*swap(t_node *node, t_stack *stack);
 
 #endif

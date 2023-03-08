@@ -6,7 +6,7 @@
 /*   By: dcaballe <dcaballe@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 14:15:52 by dcaballe          #+#    #+#             */
-/*   Updated: 2023/02/28 21:58:32 by dcaballe         ###   ########.fr       */
+/*   Updated: 2023/03/03 14:29:30 by dcaballe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,13 @@ int	is_sorted(t_node *node)
 
 int	get_stack_size(t_node *node)
 {
+	int	i;
+
+	i = 1;
 	while (node->last == 0)
+	{
 		node = node->next;
-	return (node->index);
+		i++;
+	}
+	return (i);
 }
