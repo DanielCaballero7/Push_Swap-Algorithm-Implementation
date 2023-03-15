@@ -6,36 +6,11 @@
 /*   By: dcaballe <dcaballe@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 14:08:20 by dcaballe          #+#    #+#             */
-/*   Updated: 2023/03/07 19:17:44 by dcaballe         ###   ########.fr       */
+/*   Updated: 2023/03/10 18:14:11 by dcaballe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/push_swap.h"
-
-static void	sort_all(t_node *node_a, t_node *node_b, t_stack *stack_a_info, t_stack *stack_b_info)
-{
-	int		min;
-	t_node	*aux;
-
-	set_position(node_a);
-	set_position(node_b);
-	find_target(node_a, node_b);
-	stack_a_info->size = get_stack_size(node_a);
-	stack_b_info->size = get_stack_size(node_b);
-	find_cost(node_b, stack_a_info, stack_b_info);
-	min = find_min_cost(node_b);
-	while (min != node_b->pos)
-	{
-		if (min <= stack_b_info->size / 2)
-			r_rotate(node_b, stack_b_info);
-		else
-			rotate(node_b, stack_b_info);
-	}
-	// queden 2 y 1 en b
-	aux->next = node_a;
-	node_a = push(node_b, node_a, stack_b_info);
-	
-}
 
 int	find_min_cost(t_node *node)
 {
@@ -85,7 +60,7 @@ static void	last_next(t_node *node)
 }
 
 /*Swap the first node with the second node
-	Stack = stack->next, stack->index*/	
+	Stack = stack->next, stack->index*/
 static t_node	*swap(t_node *node, t_stack *stack)
 {
 	t_node	*tmp;
@@ -122,13 +97,6 @@ static t_node	*rotate(t_node *node, t_stack *stack)
 	aux = find_lst(node);
 	aux->last = 0;
 	node->last = 1;
-	node->pos = stack->size;
-	node = node->next;
-	while (node->last == 0)
-	{
-		node->pos--;
-		node = node->next;
-	}
 	node = node->next;
 	ft_putstr_fd("r", 1);
 	ft_putchar_fd(stack->id, 1);
@@ -142,20 +110,11 @@ static t_node	*r_rotate(t_node *node, t_stack *stack)
 	while (node->next->last == 0)
 		node = node->next;
 	node->last = 1;
-	node->pos += 1;
 	node->next->last = 0;
-	node->next->pos = 0;
-	node = node->next->next;
-	while (node->last == 0)
-	{
-		node->pos++;
-		node = node->next;
-	}
-	node = node->next;
 	ft_putstr_fd("rr", 1);
 	ft_putchar_fd(stack->id, 1);
 	ft_putchar_fd('\n', 1);
-	return (node);
+	return (node->next);
 }
 
 /*123 SORTED
@@ -220,27 +179,112 @@ static t_node	*push(t_node *node_a, t_node *node_b, t_stack *stack_info)
 	return (node_b);
 }
 
+static void	update_stack(t_node *node_a, t_node *node_b,
+							t_stack *stack_a_info, t_stack *stack_b_info)
+{
+
+	node_a = (find_lst(node_a))->next;
+	node_b = (find_lst(node_b))->next;
+	set_position(node_a);
+	set_position(node_b);
+	find_target(node_a, node_b);
+	stack_a_info->size = get_stack_size(node_a);
+	stack_b_info->size = get_stack_size(node_b);
+	find_cost(node_b, stack_a_info, stack_b_info);
+}
+
+static void	push_all(t_node *node_a, t_node *node_b,
+					t_stack *stack_a_info, t_stack *stack_b_info)
+{
+	int		min;
+	t_node	*aux;
+
+	min = find_min_cost(node_b);
+	while (min != node_b->pos)
+	{
+		if (min <= stack_b_info->size / 2)
+			node_b = r_rotate(node_b, stack_b_info);
+		else
+			node_b = rotate(node_b, stack_b_info);
+	}
+	while (node_b->target != node_a->pos)
+	{
+		if (node_b->target <= stack_a_info->size / 2)
+			node_a = r_rotate(node_a, stack_a_info);
+		else
+			node_a = rotate(node_a, stack_a_info);
+	}
+	aux = node_b->next;
+	node_a = push(node_b, node_a, stack_a_info);
+	node_b = aux;
+	node_b = find_lst(node_b);
+	node_b->next = aux;
+	aux = node_a;
+	node_a = find_lst(node_a);
+	node_a->next = aux;
+}
+
+static void	sort_all(t_node *node_a, t_node *node_b, t_stack *stack_a_info, t_stack *stack_b_info)
+{
+	int		min;
+	t_node	*aux;
+
+	update_stack(node_a, node_b, stack_a_info, stack_b_info);
+	while (stack_b_info->size > 2)
+	{
+		aux = node_b->next;
+		push_all(node_a, node_b, stack_a_info, stack_b_info);
+		node_a = (find_lst(node_a))->next;
+		node_b = aux;
+		update_stack(node_a, node_b, stack_a_info, stack_b_info);
+	}
+	min = find_min_cost(node_b);
+	if (min != node_b->pos)
+		rotate(node_b, stack_b_info);
+	aux = node_b->next;
+	aux->last = 0;
+	node_b->next = node_a;
+	node_a = aux;
+	find_lst(node_a)->next = aux;
+	node_a->last = 0;
+	while (node_a->last == 0)
+	{
+		ft_putnbr_fd(node_a->index, 1);
+		aux = node_a->next;
+		free(node_a);
+		node_a = aux;
+	}
+	free(node_a);
+	free(stack_b_info);
+	free(stack_a_info);
+}
+
 static void	sort(t_node *node_a, t_stack *stack_a_info)
 {
 	t_node	*node_b;
 	t_node	*aux;
 	t_stack	*stack_b_info;
 	int		size;
+	int		i;
 
 	node_b = NULL;
 	size = stack_a_info->size;
+	stack_b_info = (t_stack *)malloc(sizeof(t_stack));
+	stack_b_info->id = 'b';
+	i = 0;
 	while (size > 0)
 	{
 		if (node_a->index < stack_a_info->size / 2)
 		{
 			aux = node_a->next;
-			node_b = push(node_a, node_b, stack_a_info);
+			node_b = push(node_a, node_b, stack_b_info);
 			node_a = aux;
 			aux = find_lst(node_a);
 			aux->next = node_a;
+			i++;
 		}
 		else
-			if (stack_a_info->size > 1)
+			if (stack_a_info->size > 1 && i <= (stack_a_info->size / 2))
 				node_a = rotate(node_a, stack_a_info);
 		size--;
 	}
@@ -249,7 +293,7 @@ static void	sort(t_node *node_a, t_stack *stack_a_info)
 	while (size > 3)
 	{
 		aux = node_a->next;
-		node_b = push(node_a, node_b, stack_a_info);
+		node_b = push(node_a, node_b, stack_b_info);
 		node_a = aux;
 		aux = find_lst(node_a);
 		aux->next = node_a;

@@ -35,6 +35,9 @@ int	main(int argc, char **argv)
 		i++;
 	}*/
 	node_a = make_stack_a(index_array);
+	free(index_array->array);
+	free(index_array->index);
+	free(index_array);
 	stack_a->id = 'a';
 	push_swap(node_a, stack_a);
 	return (0);
