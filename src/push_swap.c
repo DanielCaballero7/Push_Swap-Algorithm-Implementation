@@ -6,7 +6,7 @@
 /*   By: dcaballe <dcaballe@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 14:08:20 by dcaballe          #+#    #+#             */
-/*   Updated: 2023/03/10 18:14:11 by dcaballe         ###   ########.fr       */
+/*   Updated: 2023/03/21 19:01:30 by dcaballe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	find_min_cost(t_node *node)
 
 	last = 0;
 	aux = node;
-	while ((node->last == 0 && last == 0) || (node->last == 1))
+	while (last == 0)
 	{
 		if (node->nbr_moves < aux->nbr_moves)
 			aux = node;
@@ -35,7 +35,7 @@ static void	find_cost(t_node *node, t_stack *stack_a, t_stack *stack_b)
 	int	last;
 
 	last = 0;
-	while ((node->last == 0 && last == 0) || (node->last == 1))
+	while (last == 0)
 	{
 		if (node->target > stack_a->size / 2)
 			node->nbr_moves = stack_a->size - node->target;
@@ -163,6 +163,7 @@ static t_node	*push(t_node *node_a, t_node *node_b, t_stack *stack_info)
 		node_a->next = node_b;
 		node_b = node_a;
 		node_b->pos = 0;
+		node_b->last = 0;
 		aux = node_b;
 		node_b = node_b->next;
 		while (node_b->last == 0)
@@ -193,7 +194,7 @@ static void	update_stack(t_node *node_a, t_node *node_b,
 	find_cost(node_b, stack_a_info, stack_b_info);
 }
 
-static void	push_all(t_node *node_a, t_node *node_b,
+static t_node	*push_all(t_node *node_a, t_node *node_b,
 					t_stack *stack_a_info, t_stack *stack_b_info)
 {
 	int		min;
@@ -202,61 +203,78 @@ static void	push_all(t_node *node_a, t_node *node_b,
 	min = find_min_cost(node_b);
 	while (min != node_b->pos)
 	{
-		if (min <= stack_b_info->size / 2)
-			node_b = r_rotate(node_b, stack_b_info);
-		else
+		if (node_b->pos < min && min < stack_b_info->size / 2)
 			node_b = rotate(node_b, stack_b_info);
+		else
+			node_b = r_rotate(node_b, stack_b_info);
 	}
 	while (node_b->target != node_a->pos)
 	{
-		if (node_b->target <= stack_a_info->size / 2)
+		if (node_b->target >= stack_a_info->size / 2)
 			node_a = r_rotate(node_a, stack_a_info);
 		else
 			node_a = rotate(node_a, stack_a_info);
 	}
-	aux = node_b->next;
-	node_a = push(node_b, node_a, stack_a_info);
-	node_b = aux;
-	node_b = find_lst(node_b);
-	node_b->next = aux;
-	aux = node_a;
-	node_a = find_lst(node_a);
-	node_a->next = aux;
+	if (node_b != node_b->next)
+	{
+		aux = node_b->next;
+		node_a = push(node_b, node_a, stack_a_info);
+		node_b = aux;
+		node_b = find_lst(node_b);
+		node_b->next = aux;
+		node_b = aux;
+		aux = node_a;
+		node_a = find_lst(node_a);
+		node_a->next = aux;
+	}
+	else
+	{
+		node_a = push(node_b, node_a, stack_a_info);
+		node_a = find_lst(node_a);
+		node_a->next = node_b;
+		node_a = node_b;
+		node_b = NULL;
+	}
+	return (node_b);
 }
 
 static void	sort_all(t_node *node_a, t_node *node_b, t_stack *stack_a_info, t_stack *stack_b_info)
 {
 	int		min;
+	int		end;
 	t_node	*aux;
 
+	end = 0;
 	update_stack(node_a, node_b, stack_a_info, stack_b_info);
-	while (stack_b_info->size > 2)
+	while (end == 0)
 	{
-		aux = node_b->next;
-		push_all(node_a, node_b, stack_a_info, stack_b_info);
-		node_a = (find_lst(node_a))->next;
-		node_b = aux;
-		update_stack(node_a, node_b, stack_a_info, stack_b_info);
+		if(node_b->next != node_b)
+		{
+			node_b = push_all(node_a, node_b, stack_a_info, stack_b_info);
+			node_a = (find_lst(node_a))->next;
+			update_stack(node_a, node_b, stack_a_info, stack_b_info);
+		}
+		else
+		{
+			end = 1;
+			push_all(node_a, node_b, stack_a_info, stack_b_info);
+			node_a = (find_lst(node_a))->next;
+		}
 	}
-	min = find_min_cost(node_b);
-	if (min != node_b->pos)
-		rotate(node_b, stack_b_info);
-	aux = node_b->next;
-	aux->last = 0;
-	node_b->next = node_a;
-	node_a = aux;
-	find_lst(node_a)->next = aux;
-	node_a->last = 0;
+	while (node_a->index != 0)
+	{
+		min = get_stack_size(node_a) / 2;
+		if (node_a->index > min)
+			node_a = rotate(node_a, stack_a_info);
+		else
+			node_a = r_rotate(node_a, stack_a_info);
+	}
 	while (node_a->last == 0)
 	{
-		ft_putnbr_fd(node_a->index, 1);
 		aux = node_a->next;
 		free(node_a);
 		node_a = aux;
 	}
-	free(node_a);
-	free(stack_b_info);
-	free(stack_a_info);
 }
 
 static void	sort(t_node *node_a, t_stack *stack_a_info)
@@ -272,7 +290,7 @@ static void	sort(t_node *node_a, t_stack *stack_a_info)
 	stack_b_info = (t_stack *)malloc(sizeof(t_stack));
 	stack_b_info->id = 'b';
 	i = 0;
-	while (size > 0)
+	while (size > 3)
 	{
 		if (node_a->index < stack_a_info->size / 2)
 		{

@@ -6,14 +6,15 @@
 /*   By: dcaballe <dcaballe@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:00:41 by dcaballe          #+#    #+#             */
-/*   Updated: 2023/03/03 14:37:23 by dcaballe         ###   ########.fr       */
+/*   Updated: 2023/03/21 21:24:27 by dcaballe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//push_swap.h
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
-# define ERROR_ARGS "Error\n argumentos incorectos"
+# define NO_ARGS "Error\n No arguments"
+# define ERROR_ARGS "Error\n Arguments are not valid"
+# define ALLOCATION_FAIL "Error\n Memory allocation failed"
 # define TRUE 1
 # define FALSE 0
 # include <unistd.h>
@@ -71,5 +72,7 @@ static t_node	*sort3(t_node *node, t_stack *stack);
 static t_node	*r_rotate(t_node *node, t_stack *stack);
 static t_node	*rotate(t_node *node, t_stack *stack);
 static t_node	*swap(t_node *node, t_stack *stack);
+static t_node	*push_all(t_node *node_a, t_node *node_b,
+					t_stack *stack_a_info, t_stack *stack_b_info);
 
 #endif
