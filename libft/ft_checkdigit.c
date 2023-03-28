@@ -1,27 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_count.c                                         :+:      :+:    :+:   */
+/*   ft_checkdigit.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dcaballe <dcaballe@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: dcaballe <dcaballe@student.42malaga>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/13 17:32:59 by dcaballe          #+#    #+#             */
-/*   Updated: 2023/02/13 17:46:35 by dcaballe         ###   ########.fr       */
+/*   Created: 2023/03/25 13:24:06 by dcaballe          #+#    #+#             */
+/*   Updated: 2023/03/25 13:25:49 by dcaballe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_count(char const *s, char c)
-{
-	int	i;
-	int	count;
+#include "libft.h"
 
-	i = 0;
-	count = 0;
-	while (s[i] != '\0')
-	{
-		if (s[i] == c)
-			count++;
-		i++;
-	}
-	return (count);
+int	ft_checkdigit(char c)
+{
+	if (ft_isdigit(c) || c == '-' || c == '+')
+		return (1);
+	else
+		return (0);
 }

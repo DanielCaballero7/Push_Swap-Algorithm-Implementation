@@ -20,30 +20,18 @@ int	main(int argc, char **argv)
 	t_node	*node_a;
 
 	if (argc == 1)
-	{
-		ft_putstr_fd(NO_ARGS, 2);
-		return (-1);
-	}
+		ft_error(NO_ARGS, 2, 0);
 	stack_a = (t_stack *)malloc(sizeof(t_stack));
 	if (!stack_a)
-	{
-		ft_putstr_fd(ALLOCATION_FAIL, 2);
-		return (-1);
-	}
+		ft_error(ALLOCATION_FAIL, 2, 1);
 	stack_a->size = parse_args(argc, argv, &array);
 	if (stack_a->size == -1)
-	{
-		ft_putstr_fd(ERROR_ARGS, 2);
-		return (-1);
-	}
+		ft_error(ERROR_ARGS, 2, 1);
 	if (check_duplicates(array, stack_a->size) == -1)
-	{
-		ft_putstr_fd(ERROR_ARGS, 2);
-		return (-1);
-	}
+		ft_error(ERROR_ARGS, 2, 1);
 	index_array = organize_array(array, stack_a->size);
 	if (!index_array)
-		return (-1);
+		ft_error(ALLOCATION_FAIL, 2, 1);
 	node_a = make_stack_a(index_array);
 	free(index_array->array);
 	free(index_array->index);

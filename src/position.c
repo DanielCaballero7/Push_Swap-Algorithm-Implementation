@@ -24,14 +24,32 @@ void	set_position(t_node *node)
 		node = node->next;
 	}
 	node->pos = i;
-	node = node->next;
+}
+
+static void	find_mintgt(t_node *node_a, t_node *node_b, const t_node *fst)
+{
+	int	start;
+	int	aux;
+
+	aux = 32767;
+	start = 0;
+	while (node_a != fst || start == 0)
+	{
+		start = 1;
+		if (aux > node_a->index)
+		{
+			aux = node_a->index;
+			node_b->target = node_a->pos;
+		}
+		node_a = node_a->next;
+	}
 }
 
 static void	set_target(t_node *node_a, t_node *node_b)
 {
-	t_node	*first;
-	int		start;
-	int		aux;
+	const t_node	*first;
+	int				start;
+	int				aux;
 
 	start = 0;
 	first = node_a;
@@ -47,24 +65,13 @@ static void	set_target(t_node *node_a, t_node *node_b)
 		node_a = node_a->next;
 	}
 	if (aux == 32767)
-	{
-		while (node_a != first || start == 1)
-		{
-			start = 0;
-			if (aux > node_a->index)
-			{
-				aux = node_a->index;
-				node_b->target = node_a->pos;
-			}
-			node_a = node_a->next;
-		}
-	}
+		find_mintgt(node_a, node_b, first);
 }
 
 void	find_target(t_node *node_a, t_node *node_b)
 {
-	t_node	*first;
-	int		start;
+	const t_node	*first;
+	int				start;
 
 	start = 0;
 	first = node_b;

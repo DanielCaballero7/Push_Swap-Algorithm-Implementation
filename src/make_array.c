@@ -3,6 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   make_array.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+/*   By: dcaballe <dcaballe@student.42malaga>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/27 12:37:30 by dcaballe          #+#    #+#             */
+/*   Updated: 2023/03/27 12:47:11 by dcaballe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   make_array.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
 /*   By: dcaballe <dcaballe@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 13:40:40 by dcaballe          #+#    #+#             */
@@ -12,7 +24,7 @@
 
 #include "../inc/push_swap.h"
 
-int	check_duplicates(long *array, int nums)
+int	check_duplicates(const long *array, int nums)
 {
 	int		i;
 	int		j;
@@ -46,28 +58,27 @@ int	*fill_index(int *index, int nums)
 }
 
 /*Check if args are digits; return number of digits*/
-int	are_digits(char *str)
+int	are_digits(const char *str)
 {
 	int	i;
 
 	i = 0;
 	if (!str || str[0] == '\0' || str[0] == ' ')
 		return (-1);
-	while (str[i] != '\0' && (ft_isdigit(str[i])
-			|| str[i] == ' ' || str[i] == '-' || str[i] == '+'))
+	while (str[i] != '\0' && (ft_checkdigit(str[i]) || str[i] == ' '))
 	{
-		if (str[i] == ' ' && (str[i + 1] == ' ' || str[i + 1] == '\0'
-				|| str[i - 1] == '-' || str[i - 1] == '+'))
+		if (str[i] == ' ' && (!ft_checkdigit(str[i + 1])
+				||ft_issign(str[i - 1])))
 			return (-1);
-		else if ((str[i] == '-' || str[i] == '+') && (str[i + 1] == '\0'
-				|| str[i + 1] == '-' || str[i + 1] == '+'))
+		else if (ft_issign(str[i]) && (!ft_checkdigit(str[i + 1])))
 			return (-1);
 		else
 			i++;
 	}
 	if (!ft_isdigit(str[i]) && str[i] != '\0')
 		return (-1);
-	return (ft_count(str, ' ') + 1);
+	else
+		return (ft_count(str, ' ') + 1);
 }
 
 /*
@@ -78,14 +89,13 @@ a sequence of integer strings as separate command line arguments.
 */
 int	to_int_array(int argc, char **argv, int nums, long **array)
 {
-	int		i;
-	char	*str;
-	long	*ptr;
+	int			i;
+	const char	*str;
 
 	str = argv[1];
 	i = 0;
 	*array = (long *) malloc(sizeof(long) * nums);
-	if (!array)
+	if (*array == NULL)
 		return (-1);
 	while (i < nums)
 	{
@@ -102,7 +112,7 @@ int	to_int_array(int argc, char **argv, int nums, long **array)
 	return (0);
 }
 
-int	parse_args(int argc, char **argv, long **ptr)
+int	parse_args(int argc, char **argv, long **array)
 {
 	int		i;
 	int		nums;
@@ -121,11 +131,11 @@ int	parse_args(int argc, char **argv, long **ptr)
 				return (-1);
 		}
 	}
-	if (nums == -1 || to_int_array(argc, argv, nums, ptr) == -1)
+	if (nums <= 0 || to_int_array(argc, argv, nums, array) == -1)
 		return (-1);
 	i = -1;
 	while (++i < nums)
-		if ((*ptr)[i] > 2147483647 || (*ptr)[i] < -2147483648)
+		if ((*array)[i] > 2147483647 || (*array)[i] < -2147483648)
 			return (-1);
 	return (nums);
 }

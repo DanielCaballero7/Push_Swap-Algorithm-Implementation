@@ -15,8 +15,6 @@
 # define NO_ARGS "Error\n No arguments"
 # define ERROR_ARGS "Error\n Arguments are not valid"
 # define ALLOCATION_FAIL "Error\n Memory allocation failed"
-# define TRUE 1
-# define FALSE 0
 # include <unistd.h>
 # include "../libft/libft.h"
 
@@ -47,14 +45,16 @@ typedef struct stack
 
 
 
-int				are_digits(char *str);
+int				are_digits(const char *str);
 int				to_int_array(int argc, char **argv, int nums, long **array);
-int				parse_args(int argc, char **argv, long **ptr);
+void			ft_error(char *str, int fd, int exit_code);
+int				parse_args(int argc, char **argv, long **array);
 t_node			*find_lst(t_node *node);
 int				is_sorted(t_node *node);
 int				get_stack_size(t_node *node);
+static void		find_mintgt(t_node *node_a, t_node *node_b, const t_node *fst);
 int				*fill_index(int *index, int nums);
-int				check_duplicates(long *array, int nums);
+int				check_duplicates(const long *array, int nums);
 t_array			*organize_array(long *array, int size);
 int				sort_array(t_array *index_array);
 t_node			*make_stack_a(t_array *array);

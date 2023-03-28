@@ -1,27 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_count.c                                         :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dcaballe <dcaballe@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: dcaballe <dcaballe@student.42malaga>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/13 17:32:59 by dcaballe          #+#    #+#             */
-/*   Updated: 2023/02/13 17:46:35 by dcaballe         ###   ########.fr       */
+/*   Created: 2023/03/27 15:01:31 by dcaballe          #+#    #+#             */
+/*   Updated: 2023/03/27 15:01:31 by dcaballe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_count(char const *s, char c)
-{
-	int	i;
-	int	count;
+#include "../inc/push_swap.h"
 
-	i = 0;
-	count = 0;
-	while (s[i] != '\0')
-	{
-		if (s[i] == c)
-			count++;
-		i++;
-	}
-	return (count);
+void	ft_error(char *str, int fd, int exit_code)
+{
+	ft_putstr_fd(str, fd);
+	exit(-1);
 }
