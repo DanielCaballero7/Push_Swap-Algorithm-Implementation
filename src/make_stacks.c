@@ -52,4 +52,3 @@ t_node	*make_stack_a(t_array *array)
 	}
 	return (node_a);
 }
-

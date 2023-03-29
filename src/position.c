@@ -26,7 +26,7 @@ void	set_position(t_node *node)
 	node->pos = i;
 }
 
-static void	find_mintgt(t_node *node_a, t_node *node_b, const t_node *fst)
+void	find_mintgt(t_node *node_a, t_node *node_b, const t_node *fst)
 {
 	int	start;
 	int	aux;
@@ -45,7 +45,7 @@ static void	find_mintgt(t_node *node_a, t_node *node_b, const t_node *fst)
 	}
 }
 
-static void	set_target(t_node *node_a, t_node *node_b)
+void	set_target(t_node *node_a, t_node *node_b)
 {
 	const t_node	*first;
 	int				start;
