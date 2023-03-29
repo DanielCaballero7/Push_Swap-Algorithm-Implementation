@@ -43,11 +43,9 @@ typedef struct stack
 	char			id;
 }	t_stack;
 
-
-
 int				are_digits(const char *str);
 int				to_int_array(int argc, char **argv, int nums, long **array);
-void			ft_error(char *str, int fd, int exit_code);
+void			ft_error(char *str, int fd);
 int				parse_args(int argc, char **argv, long **array);
 t_node			*make_stackb(t_node *node_a, t_node *node_b);
 void			rotate_free(t_node *node_a, t_stack *stack_a_info);

@@ -42,7 +42,6 @@ t_node	*push_all(t_node *node_a, t_node *node_b,
 					t_stack *stack_a_info, t_stack *stack_b_info)
 {
 	int		min;
-	t_node	*aux;
 
 	min = find_min_cost(node_b);
 	while (min != node_b->pos)

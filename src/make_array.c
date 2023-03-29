@@ -81,12 +81,6 @@ int	are_digits(const char *str)
 		return (ft_count(str, ' ') + 1);
 }
 
-/*
-Transform into a array of ints.
-INPUT: 
-A string containing space separated integers or
-a sequence of integer strings as separate command line arguments.
-*/
 int	to_int_array(int argc, char **argv, int nums, long **array)
 {
 	int			i;
