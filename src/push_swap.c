@@ -38,27 +38,31 @@ t_node	*sort3(t_node *node, t_stack *stack)
 	return (node);
 }
 
-t_node	*push_all(t_node *node_a, t_node *node_b,
-					t_stack *stack_a_info, t_stack *stack_b_info)
+t_node	*push_all(t_node *na, t_node *nb,
+					t_stack *ainfo, t_stack *binfo)
 {
 	int		min;
+	t_node	*aux;
+	t_ps	*ps;
 
-	min = find_min_cost(node_b);
-	while (min != node_b->pos)
+	ps = init_ps(na, nb, ainfo, binfo);
+	aux = nb;
+	min = find_min_cost(nb);
+	while (min != aux->pos)
+		aux = aux->next;
+	ps = chooserotate(ps, aux);
+	while (ps->b->target != ps->a->pos)
 	{
-		if (node_b->pos < min && min < stack_b_info->size / 2)
-			node_b = rotate(node_b, stack_b_info);
+		if (ps->b->target >= ps->ainfo->size / 2)
+			ps->a = r_rotate(ps->a, ps->ainfo);
 		else
-			node_b = r_rotate(node_b, stack_b_info);
+			ps->a = rotate(ps->a, ps->ainfo);
 	}
-	while (node_b->target != node_a->pos)
-	{
-		if (node_b->target >= stack_a_info->size / 2)
-			node_a = r_rotate(node_a, stack_a_info);
-		else
-			node_a = rotate(node_a, stack_a_info);
-	}
-	return (push_make(node_a, node_b, stack_a_info));
+	na = ps->a;
+	nb = ps->b;
+	ainfo = ps->ainfo;
+	free (ps);
+	return (push_make(na, nb, ainfo));
 }
 
 void	sort_all(t_node *node_a, t_node *node_b,
@@ -98,7 +102,7 @@ void	sort(t_node *node_a, t_stack *stack_a_info)
 	stack_b_info = (t_stack *)malloc(sizeof(t_stack));
 	stack_b_info->id = 'b';
 	node_b = NULL;
-	while (size-- > 3)
+	while (size-- > 5)
 	{
 		if (node_a->index < stack_a_info->size / 2)
 		{
@@ -113,15 +117,27 @@ void	sort(t_node *node_a, t_stack *stack_a_info)
 	push_rest(node_a, node_b, stack_a_info, stack_b_info);
 }
 
-/*Push_swap algorithm*/
 void	push_swap(t_node *stack_a, t_stack *stack_a_info)
 {
+	t_node	*aux;
+
 	if (!is_sorted(stack_a))
-		return ;
-	if (stack_a_info->size == 2)
+		;
+	else if (stack_a_info->size == 2)
 		swap(stack_a, stack_a_info);
 	else if (stack_a_info->size == 3)
 		sort3(stack_a, stack_a_info);
 	else
+	{
 		sort(stack_a, stack_a_info);
+		return ;
+	}
+	free(stack_a_info);
+	while (stack_a->last == 0)
+	{
+		aux = stack_a->next;
+		free(stack_a);
+		stack_a = aux;
+	}
+	free(stack_a);
 }

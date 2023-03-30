@@ -12,9 +12,6 @@
 
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
-# define NO_ARGS "Error\n No arguments"
-# define ERROR_ARGS "Error\n Arguments are not valid"
-# define ALLOCATION_FAIL "Error\n Memory allocation failed"
 # include <unistd.h>
 # include "../libft/libft.h"
 
@@ -43,9 +40,20 @@ typedef struct stack
 	char			id;
 }	t_stack;
 
+typedef struct s_ps
+{
+	t_node	*a;
+	t_node	*b;
+	t_stack	*ainfo;
+	t_stack	*binfo;
+}	t_ps;
+
 int				are_digits(const char *str);
 int				to_int_array(int argc, char **argv, int nums, long **array);
-void			ft_error(char *str, int fd);
+void			ft_error(int fd);
+void			array_error(long *array, t_ps *ps);
+void			ps_error(t_ps *ps);
+t_ps			*init_push_swap(int argc);
 int				parse_args(int argc, char **argv, long **array);
 t_node			*make_stackb(t_node *node_a, t_node *node_b);
 void			rotate_free(t_node *node_a, t_stack *stack_a_info);
@@ -68,10 +76,14 @@ t_node			*find_lst(t_node *node);
 int				is_sorted(t_node *node);
 int				get_stack_size(t_node *node);
 void			push_swap(t_node *stack_a, t_stack *stack_a_info);
+void			rrr(t_ps *ps);
+void			rr(t_ps *ps);
+t_ps			*init_ps(t_node *a, t_node *b, t_stack *ainfo, t_stack *binfo);
 void			push_rest(t_node *node_a, t_node *node_b, t_stack *stack_a_info,
 					t_stack *stack_b_info);
 void			set_position(t_node *node);
 void			set_target(t_node *node_a, t_node *node_b);
+t_ps			*chooserotate(t_ps *ps, t_node *aux);
 void			find_target(t_node *node_a, t_node *node_b);
 void			last_next(t_node *node);
 void			find_cost(t_node *node, t_stack *stack_a, t_stack *stack_b);

@@ -83,3 +83,31 @@ void	find_target(t_node *node_a, t_node *node_b)
 		node_b = node_b->next;
 	}
 }
+
+t_ps	*chooserotate(t_ps *ps, t_node *aux)
+{
+	while (aux->pos != ps->b->pos)
+	{
+		if (aux->target != ps->a->pos)
+		{
+			if (aux->pos < ps->binfo->size / 2
+				&& aux->target < ps->ainfo->size / 2)
+				rr(ps);
+			else if (aux->pos > ps->binfo->size / 2
+				&& aux->target > ps->ainfo->size / 2)
+				rrr(ps);
+			else if (aux->pos < ps->binfo->size / 2)
+				ps->b = rotate(ps->b, ps->binfo);
+			else
+				ps->b = r_rotate(ps->b, ps->binfo);
+		}
+		else
+		{
+			if (aux->pos < ps->binfo->size / 2)
+				ps->b = rotate(ps->b, ps->binfo);
+			else
+				ps->b = r_rotate(ps->b, ps->binfo);
+		}
+	}
+	return (ps);
+}

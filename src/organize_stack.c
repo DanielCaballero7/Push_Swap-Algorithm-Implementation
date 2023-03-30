@@ -57,3 +57,43 @@ void	rotate_free(t_node *node_a, t_stack *stack_a_info)
 	free(node_a);
 	free(stack_a_info);
 }
+
+void	rr(t_ps *ps)
+{
+	find_lst(ps->a)->last = 0;
+	ps->a->last = 1;
+	find_lst(ps->b)->last = 0;
+	ps->b->last = 1;
+	ft_putstr_fd("rr\n", 1);
+	ps->a = ps->a->next;
+	ps->b = ps->b->next;
+}
+
+void	rrr(t_ps *ps)
+{
+	while (ps->a->next->last != 1)
+		ps->a = ps->a->next;
+	while (ps->b->next->last != 1)
+		ps->b = ps->b->next;
+	ps->a->last = 1;
+	ps->a->next->last = 0;
+	ps->b->last = 1;
+	ps->b->next->last = 0;
+	ft_putstr_fd("rrr\n", 1);
+	ps->a = ps->a->next;
+	ps->b = ps->b->next;
+}
+
+t_ps	*init_ps(t_node *a, t_node *b, t_stack *ainfo, t_stack *binfo)
+{
+	t_ps	*ps;
+
+	ps = malloc(sizeof(t_ps));
+	if (!ps)
+		return (NULL);
+	ps->a = a;
+	ps->b = b;
+	ps->ainfo = ainfo;
+	ps->binfo = binfo;
+	return (ps);
+}
