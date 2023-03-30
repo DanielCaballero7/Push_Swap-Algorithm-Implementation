@@ -1,22 +1,25 @@
 NAME = push_swap
-NAME2 = checker
 CC = gcc -g
 SRCS = src/make_array.c src/sort_array.c src/make_stacks.c src/push_swap.c \
-		src/stack_utils.c src/position.c src/error.c
+		src/stack_utils.c src/position.c src/error.c src/utils.c src/moves.c\
+		src/organize_stack.c src/main.c
+OBJS = $(SRCS:.c=.o)
 MAIN = src/main.c
-TEST = tests/checker.c
 LIBFT = libft/libft.a
+CFLAGS = -Wall -Wextra -Werror
 
 all : $(NAME)
-test: $(NAME2)
-$(NAME2): $(TEST) $(SRCS) $(LIBFT)
-	$(CC) $(SRCS) $(TEST) $(LIBFT) -o $(NAME2)
-$(NAME): $(SRCS) $(MAIN) $(LIBFT)
-	$(CC) $(SRCS) $(MAIN) $(LIBFT) -o $(NAME)
+$(LIBFT):
+	make -C libft
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+$(NAME): $(LIBFT) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -Llibft -lft -o $(NAME)
 clean:
+	rm -f $(OBJS)
+fclean: clean
 	rm -f $(NAME)
-re : clean all
-retest: 
-	rm -f $(NAME2) 
-	make test
-.PHONY: all clean re retest test
+re : fclean all
+libclean:
+	make -C ./libft fclean
+.PHONY: all clean re fclean libclean

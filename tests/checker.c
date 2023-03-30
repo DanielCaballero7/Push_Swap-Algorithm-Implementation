@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../inc/push_swap.h"
-/*text parse_args*/
+
 int	main(int argc, char **argv)
 {
 	long	*array;

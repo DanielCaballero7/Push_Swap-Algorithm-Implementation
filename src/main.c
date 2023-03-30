@@ -10,34 +10,49 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-//proyecto push_swap 42
 #include "../inc/push_swap.h"
+
+t_ps	*init_push_swap(int argc)
+{
+	t_ps	*ps;
+
+	if (argc == 1)
+		exit(1);
+	ps = (t_ps *)malloc(sizeof(t_ps));
+	if (!ps)
+		ft_error(2);
+	ps->ainfo = (t_stack *)malloc(sizeof(t_stack));
+	if (!ps->ainfo)
+	{
+		free(ps);
+		ft_error(2);
+	}
+	return (ps);
+}
 
 int	main(int argc, char **argv)
 {
 	long	*array;
 	t_array	*index_array;
-	t_stack	*stack_a;
+	t_ps	*ps;
 
-	stack_a = malloc(sizeof(t_stack));
-	if (argc == 1 || !stack_a)
-	{
-		ft_putstr_fd(ERROR_ARGS, 2);
-		return (-1);
-	}
-	stack_a->size = parse_args(argc, argv, &array);
-	if (stack_a->size == -1)
-	{
-		ft_putstr_fd(ERROR_ARGS, 2);
-		return (-1);
-	}
-	if (check_duplicates(array, stack_a->size) == -1)
-	{
-		ft_putstr_fd(ERROR_ARGS, 2);
-		return (-1);
-	}
-	index_array = organize_array(array, stack_a->size);
+	array = NULL;
+	index_array = NULL;
+	ps = init_push_swap(argc);
+	ps->ainfo->size = parse_args(argc, argv, &array);
+	if (ps->ainfo->size == -1)
+		ps_error(ps);
+	if (check_duplicates(array, ps->ainfo->size) == -1)
+		array_error(array, ps);
+	index_array = organize_array(array, ps->ainfo->size);
 	if (!index_array)
-		return (-1);
+		array_error(array, ps);
+	ps->a = make_stack_a(index_array);
+	free(index_array->array);
+	free(index_array->index);
+	free(index_array);
+	ps->ainfo->id = 'a';
+	push_swap(ps->a, ps->ainfo);
+	free(ps);
 	return (0);
 }

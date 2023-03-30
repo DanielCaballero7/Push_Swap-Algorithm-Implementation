@@ -32,7 +32,6 @@ int	sort_array(t_array *index_array)
 		}
 		i++;
 	}
-	i = 0;
 	return (0);
 }
 
